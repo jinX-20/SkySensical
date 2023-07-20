@@ -1,1 +1,1 @@
-# skysensical.github.io
+# SkySensical - provides weather forecast
