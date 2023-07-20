@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Pangolin&display=swap" rel="stylesheet" />
+    <title>SkySensical | Home</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <header>
+        <h1>SkySensical</h1>
+        <p>Weather insights at your fingertips</p>
+    </header>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="#">About Us</a>
+    </nav>
+    <main>
+        <form id="weatherForm">
+            <p>
+                Enter your city: &nbsp; &nbsp; &nbsp;
+                <input type="text" id="cityInput" placeholder="Enter city name" required />
+            </p>
+            <br />
+            <button type="submit">Get Weather</button> &nbsp; &nbsp;
+            <button type="reset">Reset</button>
+            <br />
+            <hr />
+        </form>
+
+        <div class="data">
+            <h2>Temperature: <span id="temp" class="output"></span></h2>
+        </div>
+
+        <div class="data">
+            <h2>Humidity: <span id="humidity" class="output"></span></h2>
+        </div>
+
+        <div class="data">
+            <h2>Weather Description: <span id="descr" class="output"></span></h2>
+        </div>
+        <script>
+            const form = document.getElementById("weatherForm");
+            const cityInput = document.getElementById("cityInput");
+
+            form.addEventListener("submit", function (event) {
+                event.preventDefault();
+
+                const apiKey = "49cbaf56b8d22a9c511b9344f62e1b5c";
+                const cityName = cityInput.value;
+
+                fetch(
+                    `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${apiKey}`
+                )
+                    .then(function (response) {
+                        return response.json();
+                    })
+                    .then(function (data) {
+                        const temperature = data.main.temp;
+                        const humidity = data.main.humidity;
+                        const weatherDescription = data.weather[0].description;
+
+                        const temperatureElement = document.getElementById("temp");
+                        temperatureElement.textContent = (temperature - 273.15).toFixed(2) + "\u00B0C";
+
+                        const humidityElement = document.getElementById("humidity");
+                        humidityElement.textContent = humidity;
+
+                        const weatherDescriptionElement = document.getElementById("descr");
+                        weatherDescriptionElement.textContent = weatherDescription;
+                    })
+                    .catch(function (error) {
+                        const temperatureElement = document.getElementById("temp");
+                        temperatureElement.textContent = "City not found";
+
+                        const humidityElement = document.getElementById("humidity");
+                        humidityElement.textContent = "";
+
+                        const weatherDescriptionElement = document.getElementById("descr");
+                        weatherDescriptionElement.textContent = "";
+
+                        console.log("Error:", error);
+                    });
+            });
+
+
+        </script>
+    </main>
+</body>
+
+</html>
